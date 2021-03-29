@@ -7,8 +7,9 @@ public static class VoxelData
     /*
      * A voxel represents a value on a regular grid in three-dimensional space. As with pixels in a 2D bitmap, voxels themselves do not typically have their position (i.e. coordinates) 
      * explicitly encoded with their values. Instead, rendering systems infer the position of a voxel based upon its position relative to other voxels (i.e., its position in the data 
-     * structure that makes up a single volumetric image).*/
-
+     * structure that makes up a single volumetric image).
+     */
+     
     public static readonly int ChunkWidth = 5;
     public static readonly int ChunkHeight = 5;
 

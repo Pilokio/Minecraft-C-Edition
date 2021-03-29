@@ -6,6 +6,11 @@ public class World : MonoBehaviour
 {
     public Material material;
     public BlockType[] blockTypes;
+
+    private void Start() 
+    {
+        Chunk newChunk = new Chunk(this);
+    }
 }
 
 [System.Serializable]
@@ -24,7 +29,6 @@ public class BlockType
 
 
     // Back, Front, Top, Bottom, Left, Right
-
     public int GetTextureID (int faceIndex)
     {
         switch (faceIndex)
