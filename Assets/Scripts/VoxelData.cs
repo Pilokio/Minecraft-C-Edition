@@ -9,9 +9,15 @@ public static class VoxelData
      * explicitly encoded with their values. Instead, rendering systems infer the position of a voxel based upon its position relative to other voxels (i.e., its position in the data 
      * structure that makes up a single volumetric image).
      */
-     
+
     public static readonly int ChunkWidth = 5;
     public static readonly int ChunkHeight = 5;
+    public static readonly int WorldSizeInChunks = 5;
+
+    public static int WorldSizeInVoxels
+    {
+        get { return WorldSizeInChunks * ChunkWidth; }
+    }
 
     public static readonly int TextureAtlasSizeInBlocks = 4;
     public static float NormalizedBlockTextureSize
