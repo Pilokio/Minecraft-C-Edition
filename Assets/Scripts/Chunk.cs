@@ -47,7 +47,7 @@ public class Chunk
             {
                 for (int z = 0; z < VoxelData.ChunkWidth; z++)
                 {
-                    voxelMap[x, y, z] = world.GetVoxel(new Vector3(x, y, z));
+                    voxelMap[x, y, z] = world.GetVoxel(new Vector3(x, y, z) + position);
                 }
             }
         }
@@ -67,7 +67,7 @@ public class Chunk
         }
     }
 
-    public bool IsActive
+    public bool isActive
     {
         get { return chunkObject.activeSelf; }
         set { chunkObject.SetActive(value); }
@@ -163,5 +163,15 @@ public class ChunkCoord
     {
         x = _x;
         z = _z;
+    }
+
+    public bool Equals(ChunkCoord other)
+    {
+        if (other == null)
+            return false;
+        else if (other.x == x && other.z == z)
+            return true;
+        else
+            return false;
     }
 }
