@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
+    public int seed;
+    public BiomeAttributes biome;
+
     public Transform player;
     public Vector3 spawnPosition;
 
@@ -13,16 +16,25 @@ public class World : MonoBehaviour
     Chunk[,] chunks = new Chunk[VoxelData.WorldSizeInChunks, VoxelData.WorldSizeInChunks];
 
     List<ChunkCoord> activeChunks = new List<ChunkCoord>();
+    ChunkCoord playerChunkCoord;
+    ChunkCoord playerLastChunkCoord;
 
     private void Start()
     {
+        Random.InitState(seed);
+
         spawnPosition = new Vector3((VoxelData.WorldSizeInChunks * VoxelData.ChunkWidth) / 2f, VoxelData.ChunkHeight + 2f, (VoxelData.WorldSizeInChunks * VoxelData.ChunkWidth) / 2f);
         GenerateWorld();
+        playerLastChunkCoord = GetChunkCoordFromVector3(player.position);
     }
 
     private void Update()
     {
-        CheckViewDistance();
+        playerChunkCoord = GetChunkCoordFromVector3(player.position);
+
+        // Only update the chunks if the player has movef from the chunk they were previously on
+        if (!playerChunkCoord.Equals(playerLastChunkCoord))
+            CheckViewDistance();
     }
 
     void GenerateWorld()
@@ -86,18 +98,28 @@ public class World : MonoBehaviour
 
     public byte GetVoxel(Vector3 pos)
     {
+        int yPos = Mathf.FloorToInt(pos.y);
+
+        /* IMMUTABLE PASS */
+
+        // If outside world, return air block
         if (!IsVoxelInWorld(pos))
-        {
             return 0;
-        }
-        if (pos.y < 1)
-        {
+
+        // If bottom block of chunk, return bedrock
+        if (yPos == 0)
             return 1;
-        }
-        else if (pos.y == VoxelData.ChunkHeight - 1)
-        {
+
+        /* BASIC TERRAIN PASS */
+
+        int terrainHeight = Mathf.FloorToInt(biome.terrainHeight * Noise.Get2DPerlin(new Vector2(pos.x, pos.z), 0, biome.terrainScale)) + biome.solidGroundHeight;
+
+        if (yPos == terrainHeight)
             return 3;
-        }
+        else if (yPos < terrainHeight && yPos > terrainHeight - 4)
+            return 5;
+        else if (yPos > terrainHeight)
+            return 0;
         else
             return 2;
     }
