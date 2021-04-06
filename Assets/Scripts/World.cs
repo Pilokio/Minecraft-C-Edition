@@ -113,15 +113,31 @@ public class World : MonoBehaviour
         /* BASIC TERRAIN PASS */
 
         int terrainHeight = Mathf.FloorToInt(biome.terrainHeight * Noise.Get2DPerlin(new Vector2(pos.x, pos.z), 0, biome.terrainScale)) + biome.solidGroundHeight;
+        byte voxelValue = 0;
 
         if (yPos == terrainHeight)
-            return 3;
+            voxelValue = 3;
         else if (yPos < terrainHeight && yPos > terrainHeight - 4)
-            return 5;
+            voxelValue = 5;
         else if (yPos > terrainHeight)
             return 0;
         else
-            return 2;
+            voxelValue = 2;
+
+        /* SECOND PASS */
+
+        if (voxelValue == 2)
+        {
+            foreach (Lode lode in biome.lodes)
+            {
+                if (yPos > lode.minHeight && yPos < lode.maxHeight)
+                {
+                    if (Noise.Get3DPerlin(pos, lode.noiseOffset, lode.scale, lode.threshold))
+                        voxelValue = lode.blockID;
+                }
+            }
+        }
+        return voxelValue;
     }
 
     void CreateNewChunk(int x, int z)
