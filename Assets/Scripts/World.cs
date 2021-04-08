@@ -105,7 +105,7 @@ public class World : MonoBehaviour
         int xChunk = xCheck / VoxelData.ChunkWidth;
         int zChunk = zCheck / VoxelData.ChunkWidth;
 
-        xChunk -= (xChunk * VoxelData.ChunkWidth);
+        xCheck -= (xChunk * VoxelData.ChunkWidth);
         zCheck -= (zChunk * VoxelData.ChunkWidth);
 
         return blockTypes[chunks[xChunk, zChunk].voxelMap[xCheck, yCheck, zCheck]].isSolid;
