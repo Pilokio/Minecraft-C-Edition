@@ -46,8 +46,7 @@ public class Chunk
         chunkObject.name = "Chunk " + coord.x + ", " + coord.z;
 
         PopulateVoxelMap();
-        CreateMeshData();
-        CreateMesh();
+        UpdateChunk();
     }
 
     void PopulateVoxelMap()
@@ -66,8 +65,10 @@ public class Chunk
         isVoxelMapPopulated = true;
     }
 
-    void CreateMeshData()
+    void UpdateChunk()
     {
+        ClearMeshData();
+
         for (int y = 0; y < VoxelData.ChunkHeight; y++)
         {
             for (int x = 0; x < VoxelData.ChunkWidth; x++)
@@ -75,10 +76,20 @@ public class Chunk
                 for (int z = 0; z < VoxelData.ChunkWidth; z++)
                 {
                     if (world.blockTypes[voxelMap[x, y, z]].isSolid)
-                        AddVoxelDataToChunk(new Vector3(x, y, z));
+                        UpdateMeshData(new Vector3(x, y, z));
                 }
             }
         }
+
+        CreateMesh();
+    }
+
+    void ClearMeshData()
+    {
+        vertexIndex = 0;
+        triangles.Clear();
+        triangles.Clear();
+        uvs.Clear();
     }
 
     public bool isActive
@@ -129,7 +140,7 @@ public class Chunk
         return voxelMap[xCheck, yCheck, zCheck];
     }
 
-    void AddVoxelDataToChunk(Vector3 pos)
+    void UpdateMeshData(Vector3 pos)
     {
         for (int p = 0; p < 6; p++)
         {
