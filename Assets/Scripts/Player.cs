@@ -40,13 +40,14 @@ public class Player : MonoBehaviour
         world = GameObject.Find("World").GetComponent<World>();
 
         Cursor.lockState = CursorLockMode.Locked;
-        
+
         selectedBlocktext.text = world.blockTypes[selectedBlockIndex].blockName + " box selected";
     }
 
     private void Update()
     {
         GetPlayerInputs();
+        PlaceCursorBlocks();
     }
 
     private void FixedUpdate()
@@ -125,9 +126,24 @@ public class Player : MonoBehaviour
 
             selectedBlocktext.text = world.blockTypes[selectedBlockIndex].blockName + " box selected";
         }
+
+        if (highlightBlock.gameObject.activeSelf)
+        {
+            // Destroy block
+            if (Input.GetMouseButtonDown(0))
+            {
+                world.GetChunkFromVector3(highlightBlock.position).EditVoxel(highlightBlock.position, 0);
+            }
+
+            // Place block
+            if (Input.GetMouseButtonDown(1))
+            {
+                world.GetChunkFromVector3(placeBlock.position).EditVoxel(placeBlock.position, selectedBlockIndex);
+            }
+        }
     }
 
-    private void PlaceCurasorBlocks()
+    private void PlaceCursorBlocks()
     {
         float step = checkIncrement;
         Vector3 lastPos = new Vector3();

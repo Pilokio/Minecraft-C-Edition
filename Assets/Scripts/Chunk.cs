@@ -116,6 +116,37 @@ public class Chunk
             return true;
     }
 
+    public void EditVoxel(Vector3 pos, byte newID)
+    {
+        int xCheck = Mathf.FloorToInt(pos.x);
+        int yCheck = Mathf.FloorToInt(pos.y);
+        int zCheck = Mathf.FloorToInt(pos.z);
+
+        xCheck -= Mathf.FloorToInt(chunkObject.transform.position.x);
+        zCheck -= Mathf.FloorToInt(chunkObject.transform.position.z);
+
+        voxelMap[xCheck, yCheck, zCheck] = newID;
+
+        UpdateSurroundingVoxels(xCheck, yCheck, zCheck);
+
+        UpdateChunk();
+    }
+
+    void UpdateSurroundingVoxels(int x, int y, int z)
+    {
+        Vector3 thisVoxel = new Vector3(x, y, z);
+
+        for (int p = 0; p < 6; p++)
+        {
+            Vector3 currentVoxel = thisVoxel + VoxelData.faceChecks[p];
+
+            if (!IsVoxelInChunk((int)currentVoxel.x, (int)currentVoxel.y, (int)currentVoxel.z))
+            {
+                world.GetChunkFromVector3(currentVoxel + position).UpdateChunk();
+            }
+        }
+    }
+
     bool CheckVoxel(Vector3 pos)
     {
         int x = Mathf.FloorToInt(pos.x);
