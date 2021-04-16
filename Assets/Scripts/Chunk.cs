@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Everything that makes up the cubes in game
 public class Chunk
 {
     public ChunkCoord coord;
@@ -10,7 +9,6 @@ public class Chunk
     GameObject chunkObject;
     MeshRenderer meshRenderer;
     MeshFilter meshFilter;
-
 
     int vertexIndex = 0;
     List<Vector3> vertices = new List<Vector3>();
@@ -45,6 +43,7 @@ public class Chunk
         chunkObject.transform.position = new Vector3(coord.x * VoxelData.ChunkWidth, 0f, coord.z * VoxelData.ChunkWidth);
         chunkObject.name = "Chunk " + coord.x + ", " + coord.z;
 
+
         PopulateVoxelMap();
         UpdateChunk();
     }
@@ -57,7 +56,9 @@ public class Chunk
             {
                 for (int z = 0; z < VoxelData.ChunkWidth; z++)
                 {
+
                     voxelMap[x, y, z] = world.GetVoxel(new Vector3(x, y, z) + position);
+
                 }
             }
         }
@@ -86,14 +87,16 @@ public class Chunk
 
     void ClearMeshData()
     {
+
         vertexIndex = 0;
-        triangles.Clear();
+        vertices.Clear();
         triangles.Clear();
         uvs.Clear();
     }
 
     public bool isActive
     {
+
         get { return _isActive; }
         set
         {
@@ -101,6 +104,7 @@ public class Chunk
             if (chunkObject != null)
                 chunkObject.SetActive(value);
         }
+
     }
 
     public Vector3 position
@@ -142,7 +146,9 @@ public class Chunk
 
             if (!IsVoxelInChunk((int)currentVoxel.x, (int)currentVoxel.y, (int)currentVoxel.z))
             {
+
                 world.GetChunkFromVector3(currentVoxel + position).UpdateChunk();
+
             }
         }
     }
@@ -177,6 +183,7 @@ public class Chunk
         {
             if (!CheckVoxel(pos + VoxelData.faceChecks[p]))
             {
+
                 byte blockID = voxelMap[(int)pos.x, (int)pos.y, (int)pos.z];
 
                 vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 0]]);
@@ -192,7 +199,6 @@ public class Chunk
                 triangles.Add(vertexIndex + 2);
                 triangles.Add(vertexIndex + 1);
                 triangles.Add(vertexIndex + 3);
-
                 vertexIndex += 4;
             }
         }

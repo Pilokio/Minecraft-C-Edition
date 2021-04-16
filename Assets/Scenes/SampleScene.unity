@@ -1226,6 +1226,8 @@ MonoBehaviour:
   placeBlock: {fileID: 97290489}
   checkIncrement: 0.1
   reach: 8
+  selectedBlocktext: {fileID: 1396624046}
+  selectedBlockIndex: 1
 --- !u!4 &2101021199
 Transform:
   m_ObjectHideFlags: 0

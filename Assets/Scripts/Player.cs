@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
 
         if (scroll != 0)
         {
-            if (scroll >= 0)
+            if (scroll > 0)
                 selectedBlockIndex++;
             else
                 selectedBlockIndex--;
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
             if (selectedBlockIndex < 1)
                 selectedBlockIndex = (byte)(world.blockTypes.Length - 1);
 
-            selectedBlocktext.text = world.blockTypes[selectedBlockIndex].blockName + " box selected";
+            selectedBlocktext.text = world.blockTypes[selectedBlockIndex].blockName + " block selected";
         }
 
         if (highlightBlock.gameObject.activeSelf)
